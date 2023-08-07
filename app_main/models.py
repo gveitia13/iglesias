@@ -35,6 +35,7 @@ class Distrito(models.Model):
     jovenes = models.PositiveIntegerField('Jóvenes')
     damas = models.PositiveIntegerField()
     caballeros = models.PositiveIntegerField()
+    total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
     # Aistencia / Bautizados
     promedio_asistencia = models.FloatField()
     bautizados_espiritu = models.FloatField('Bautizados Espíritu')
@@ -45,6 +46,12 @@ class Distrito(models.Model):
 
     def __str__(self):
         return f'Distrito - {self.nombre} {self.apellidos}: {self.fecha}'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
+        self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
+        self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
+        return super().save()
 
 
 class Presbiterio(models.Model):
@@ -81,6 +88,7 @@ class Presbiterio(models.Model):
     jovenes = models.PositiveIntegerField('Jóvenes')
     damas = models.PositiveIntegerField()
     caballeros = models.PositiveIntegerField()
+    total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
     # Aistencia / Bautizados
     promedio_asistencia = models.FloatField()
     bautizados_espiritu = models.FloatField('Bautizados Espíritu')
@@ -97,4 +105,7 @@ class Presbiterio(models.Model):
         user = get_current_user()
         if not self.user:
             self.user = user
+        self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
+        self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
+        self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
         return super().save()

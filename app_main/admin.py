@@ -27,6 +27,9 @@ class DistritoAdmin(admin.ModelAdmin):
     readonly_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'bautizados_espiritu',
                        'promedio_asistencia')
 
+    search_fields = ('presbiterio', 'fecha')
+    list_filter = ('distrito', 'fecha')
+
 
 @admin.register(Presbiterio)
 class PresbiterioAdmin(admin.ModelAdmin):
