@@ -51,27 +51,27 @@ BUSINESS_NAME_IMG_PATH = 'admin/img/logo_lg.png'
 BUSINESS_BANNER = 'admin/img/banner_lg.png'
 BUSINESS_ICON_PATH = 'admin/img/logo-sm-blue-black.png'
 
-# JAZZMIN_SETTINGS = {
-#     "site_brand": BUSINESS_NAME,
-#     "welcome_sign": '',
-#     'site_icon': BUSINESS_ICON_PATH,
-#     'site_logo': BUSINESS_LOGO_PATH,
-#     'site_logo_classes': 'brand-image',
-#     "login_logo": BUSINESS_NAME_IMG_PATH,
-#     "login_logo_dark": False,
-#     'site_header': BUSINESS_NAME,
-#     "custom_css": 'admin/css/admin.css',
-#     'copyright': 'By TechnoStar',
-#     'custom_js': 'admin/js/admin.js',
-#     # "search_model": ["auth.User", "auth.Group"],
-#     "user_avatar": 'get_profile_photo',
-#     "icons": {
-#         "auth": "fas fa-users-cog",
-#         "user.User": "fas fa-user",
-#         "auth.Group": "fas fa-users",
-#     },
-#     "order_with_respect_to": ["user", "core", 'core.config'],
-# }
+JAZZMIN_SETTINGS = {
+    # "site_brand": BUSINESS_NAME,
+    # "welcome_sign": '',
+    # 'site_icon': BUSINESS_ICON_PATH,
+    # 'site_logo': BUSINESS_LOGO_PATH,
+    # 'site_logo_classes': 'brand-image',
+    # "login_logo": BUSINESS_NAME_IMG_PATH,
+    # "login_logo_dark": False,
+    # 'site_header': BUSINESS_NAME,
+    # "custom_css": 'admin/css/admin.css',
+    # 'copyright': 'By TechnoStar',
+    # 'custom_js': 'admin/js/admin.js',
+    # # "search_model": ["auth.User", "auth.Group"],
+    # "user_avatar": 'get_profile_photo',
+    # "icons": {
+    #     "auth": "fas fa-users-cog",
+    #     "user.User": "fas fa-user",
+    #     "auth.Group": "fas fa-users",
+    # },
+    "order_with_respect_to": ["app_main", "app_user", ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,4 +1,7 @@
+from crum import get_current_user
 from django.db import models
+
+from iglesias import settings
 
 
 class Distrito(models.Model):
@@ -26,15 +29,15 @@ class Distrito(models.Model):
     ministros = models.PositiveIntegerField()
     miembros = models.PositiveIntegerField()
     visitantes = models.PositiveIntegerField()
-    ninnos = models.PositiveIntegerField()
-    total_afiliacion_oficial = models.PositiveIntegerField()
+    ninnos = models.PositiveIntegerField('Niños')
+    total_afiliacion_oficial = models.PositiveIntegerField('Total afiliación oficial')
     # Departamentos / Ministerios
     jovenes = models.PositiveIntegerField('Jóvenes')
     damas = models.PositiveIntegerField()
     caballeros = models.PositiveIntegerField()
     # Aistencia / Bautizados
     promedio_asistencia = models.FloatField()
-    bautizados_espiritu = models.FloatField()
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu')
     # Liderazgo / Estudios Teológicos
     lideres_locales = models.PositiveIntegerField('Líderes locales')
     obreros_tiempo_completo = models.PositiveIntegerField()
@@ -45,9 +48,11 @@ class Distrito(models.Model):
 
 
 class Presbiterio(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
+
     fecha = models.DateField('Fecha de creación', auto_now_add=True, )
     presbiterio = models.CharField(null=True, blank=True, max_length=500)
     # Cuerpo ministerial
@@ -70,15 +75,15 @@ class Presbiterio(models.Model):
     ministros = models.PositiveIntegerField()
     miembros = models.PositiveIntegerField()
     visitantes = models.PositiveIntegerField()
-    ninnos = models.PositiveIntegerField()
-    total_afiliacion_oficial = models.PositiveIntegerField()
+    ninnos = models.PositiveIntegerField('Niños')
+    total_afiliacion_oficial = models.PositiveIntegerField('Total afiliación oficial')
     # Departamentos / Ministerios
     jovenes = models.PositiveIntegerField('Jóvenes')
     damas = models.PositiveIntegerField()
     caballeros = models.PositiveIntegerField()
     # Aistencia / Bautizados
     promedio_asistencia = models.FloatField()
-    bautizados_espiritu = models.FloatField()
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu')
     # Liderazgo / Estudios Teológicos
     lideres_locales = models.PositiveIntegerField('Líderes locales')
     obreros_tiempo_completo = models.PositiveIntegerField()
@@ -86,3 +91,10 @@ class Presbiterio(models.Model):
 
     def __str__(self):
         return f'Presbiterio - {self.nombre} {self.apellidos}: {self.fecha}'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        # self.full_clean()
+        user = get_current_user()
+        if not self.user:
+            self.user = user
+        return super().save()
