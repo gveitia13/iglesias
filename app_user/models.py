@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
     email = models.EmailField(_("email address"), null=True, blank=True, unique=True)
-    is_distro = models.BooleanField(
+    is_superstar = models.BooleanField(
         _("Admin"), default=False, help_text=_("Designates that this user has all permissions without "
                                                "explicitly assigning them."), )
     is_superuser = models.BooleanField(
@@ -15,11 +15,15 @@ class User(AbstractUser):
         ), )
     is_staff = models.BooleanField(
         _("staff status"), default=True, help_text=_("Designates whether the user can log into this admin site."), )
-    REQUIRED_FIELDS = ['is_distro', 'email']
+    role = models.CharField('Rol', choices=(
+        ('1', 'Jefe de Distro'),
+        ('2', 'Jefe de Presbiterio'),
+    ), max_length=2, default='2')
+    REQUIRED_FIELDS = ['is_superstar', 'email']
 
     class Meta:
         verbose_name = 'Usuario'
-        ordering = ('-is_distro', '-is_active')
+        ordering = ('-is_superstar', '-is_active')
 
     def __str__(self):
         return self.username
