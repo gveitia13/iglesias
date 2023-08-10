@@ -33,17 +33,17 @@ class DistritoAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
             return True
-        return
+        return False
 
     def has_change_permission(self, request, obj=None):
         if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
             return True
-        return
+        return False
 
     def has_delete_permission(self, request, obj=None):
         if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
             return True
-        return
+        return False
 
 
 @admin.register(Presbiterio)
@@ -73,16 +73,16 @@ class PresbiterioAdmin(admin.ModelAdmin):
     list_filter = ('distrito', 'fecha')
 
     def has_change_permission(self, request, obj=None):
-        if bool(request.user and (
+        if bool(request.user and obj and (
                 request.user.is_superstar or (request.user.role == '2' and obj.user == request.user))):
             return True
-        return
+        return False
 
     def has_delete_permission(self, request, obj=None):
-        if bool(request.user and (
+        if bool(request.user and obj and (
                 request.user.is_superstar or (request.user.role == '2' and obj.user == request.user))):
             return True
-        return
+        return False
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
