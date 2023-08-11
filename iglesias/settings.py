@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_cleanup.apps.CleanupConfig',
+    'drf_yasg',
     'app_main',
     'app_user',
 ]
@@ -64,7 +65,7 @@ JAZZMIN_SETTINGS = {
     'copyright': 'By TechnoStar',
     'custom_js': 'admin/js/admin.js',
     # "search_model": ["auth.User", "auth.Group"],
-    "user_avatar": 'get_profile_photo',
+    # "user_avatar": 'get_profile_photo',
     "icons": {
         "auth": "fas fa-users-cog",
         "user.User": "fas fa-user",

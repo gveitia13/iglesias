@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from crum import get_current_user
 from django.db import models
 
@@ -8,7 +10,7 @@ class Distrito(models.Model):
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
-    fecha = models.DateField('Fecha de creación', auto_now_add=True, )
+    fecha = models.DateField('Fecha de creación', auto_now_add=True,)
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
