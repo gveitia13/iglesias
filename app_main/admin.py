@@ -29,6 +29,7 @@ class DistritoAdmin(admin.ModelAdmin):
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
+    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha',)
 
     def has_add_permission(self, request):
         if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
@@ -71,6 +72,7 @@ class PresbiterioAdmin(admin.ModelAdmin):
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
+    list_display = ('distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha',)
 
     def has_change_permission(self, request, obj=None):
         if bool(request.user and obj and (

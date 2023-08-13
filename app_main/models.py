@@ -10,7 +10,7 @@ class Distrito(models.Model):
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
-    fecha = models.DateField('Fecha de creación', auto_now_add=True,)
+    fecha = models.DateField('Fecha de creación', auto_now_add=True, )
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
@@ -48,7 +48,7 @@ class Distrito(models.Model):
     estudiantes = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'Distrito - {self.distrito}: {self.fecha}'
+        return f'{self.distrito}'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
@@ -60,7 +60,8 @@ class Distrito(models.Model):
 
 
 class Presbiterio(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Usuario', on_delete=models.SET_NULL, null=True,
+                             blank=True)
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
