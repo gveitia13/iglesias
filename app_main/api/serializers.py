@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PresbiterioSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True, allow_null=True, required=False)
 
     class Meta:
         model = Presbiterio
@@ -29,4 +29,4 @@ class PresbiterioSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'bautizados_espiritu',
                             'promedio_asistencia', 'total_departamento', 'user')
-        depth = 1
+        # depth = 1
