@@ -2,15 +2,18 @@ from datetime import datetime
 
 from crum import get_current_user
 from django.db import models
+from django.utils.safestring import mark_safe
 
 from iglesias import settings
 
 
 class Distrito(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Usuario', on_delete=models.SET_NULL, null=True,
+                             blank=True)
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
-    fecha = models.DateField('Fecha de creación', auto_now_add=True, )
+    fecha = models.DateField('Fecha de creación', default=datetime.now, )
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
@@ -51,12 +54,27 @@ class Distrito(models.Model):
         return f'{self.distrito}'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        user = get_current_user()
+        if not self.user:
+            self.user = user
         self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
         self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
         self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
         if self.pk:
             self.cant_presbiterios = self.presbiterio_set.count()
         return super().save()
+
+    def get_options(self):
+        user = get_current_user()
+        html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning">Editar</a>'
+        if user.is_superstar or user.role == '1':
+            html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger">Eliminar</a>'
+        return mark_safe(html)
+
+    get_options.short_description = 'Opciones'
+
+    class Meta:
+        ordering = ('distrito',)
 
 
 class Presbiterio(models.Model):
@@ -66,7 +84,7 @@ class Presbiterio(models.Model):
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
 
-    fecha = models.DateField('Fecha de creación', auto_now_add=True, )
+    fecha = models.DateField('Fecha de creación', default=datetime.now, )
     presbiterio = models.CharField(null=True, blank=True, max_length=500)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
@@ -115,3 +133,13 @@ class Presbiterio(models.Model):
         self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
         self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
         return super().save()
+
+    def get_options(self):
+        return mark_safe(
+            f'<a href="/admin/app_main/presbiterio/{self.pk}/change/" class="btn m-1 btn-sm btn-warning">Editar</a>'
+            f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger">Eliminar</a>')
+
+    get_options.short_description = 'Opciones'
+
+    class Meta:
+        ordering = ('distrito', 'user')

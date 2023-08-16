@@ -29,22 +29,20 @@ class DistritoAdmin(admin.ModelAdmin):
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
-    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha',)
+    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'get_options')
 
     def has_add_permission(self, request):
-        if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
-            return True
-        return False
+        return bool(request.user and (request.user.is_superstar or request.user.role == '1'))
 
     def has_change_permission(self, request, obj=None):
-        if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
-            return True
-        return False
+        return bool(request.user and obj and (
+                request.user.is_superstar or (
+                request.user.role == '1' and obj.user == request.user)))
 
     def has_delete_permission(self, request, obj=None):
-        if bool(request.user and (request.user.is_superstar or request.user.role == '1')):
-            return True
-        return False
+        return bool(request.user and obj and (
+                request.user.is_superstar or (
+                request.user.role == '1' and obj.user == request.user)))
 
 
 @admin.register(Presbiterio)
@@ -72,21 +70,25 @@ class PresbiterioAdmin(admin.ModelAdmin):
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
-    list_display = ('distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha',)
+    list_display = ('distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha', 'get_options')
 
     def has_change_permission(self, request, obj=None):
         if bool(request.user and obj and (
-                request.user.is_superstar or (request.user.role == '2' and obj.user == request.user))):
+                request.user.is_superstar or request.user.role == '1' or (
+                request.user.role == '2' and obj.user == request.user))):
             return True
         return False
 
     def has_delete_permission(self, request, obj=None):
         if bool(request.user and obj and (
-                request.user.is_superstar or (request.user.role == '2' and obj.user == request.user))):
+                request.user.is_superstar or request.user.role == '1' or (
+                request.user.role == '2' and obj.user == request.user))):
             return True
         return False
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
+        if request.user.role == '1' or request.user.is_superstar:
+            return queryset
         queryset = queryset.filter(user=request.user)
         return queryset
