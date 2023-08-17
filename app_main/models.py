@@ -13,7 +13,8 @@ class Distrito(models.Model):
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
-    fecha = models.DateField('Fecha de creación', default=datetime.now, )
+    fecha = models.DateField('Fecha de creación', auto_now_add=True,
+                             help_text='Se autosignará la fecha cuando sea creado')
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
@@ -84,7 +85,8 @@ class Presbiterio(models.Model):
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
 
-    fecha = models.DateField('Fecha de creación', default=datetime.now, )
+    fecha = models.DateField('Fecha de creación', auto_now_add=True,
+                             help_text='Se autosignará la fecha cuando sea creado')
     presbiterio = models.CharField(null=True, blank=True, max_length=500)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField()
