@@ -51,6 +51,9 @@ class Distrito(models.Model):
     obreros_tiempo_completo = models.PositiveIntegerField()
     estudiantes = models.PositiveIntegerField()
 
+    def get_cant_presbiterios(self):
+        return self.presbiterio_set.count()
+
     def __str__(self):
         return f'{self.distrito}'
 
@@ -67,12 +70,14 @@ class Distrito(models.Model):
 
     def get_options(self):
         user = get_current_user()
-        html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning">Editar</a>'
+        html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
         if user.is_superstar or user.role == '1':
-            html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger">Eliminar</a>'
+            html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>'
+        html = '<div class="d-flex">' + html + '</div>'
         return mark_safe(html)
 
     get_options.short_description = 'Opciones'
+    get_cant_presbiterios.short_description = 'Cantidad de presbiterios'
 
     class Meta:
         ordering = ('distrito',)
@@ -138,8 +143,8 @@ class Presbiterio(models.Model):
 
     def get_options(self):
         return mark_safe(
-            f'<a href="/admin/app_main/presbiterio/{self.pk}/change/" class="btn m-1 btn-sm btn-warning">Editar</a>'
-            f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger">Eliminar</a>')
+            f'<div class="d-flex"><a href="/admin/app_main/presbiterio/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
+            f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a></div>')
 
     get_options.short_description = 'Opciones'
 

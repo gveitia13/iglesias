@@ -29,7 +29,8 @@ class DistritoAdmin(admin.ModelAdmin):
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
-    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'get_options')
+    list_display = ('distrito', 'user', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'get_options')
+    list_display_links = None
 
     def has_add_permission(self, request):
         return bool(request.user and (request.user.is_superstar or request.user.role == '1'))
@@ -43,6 +44,15 @@ class DistritoAdmin(admin.ModelAdmin):
         return bool(request.user and obj and (
                 request.user.is_superstar or (
                 request.user.role == '1' and obj.user == request.user)))
+
+    # def get_queryset(self, request):
+    #     queryset = super().get_queryset(request)
+    #     if request.user.is_superstar:
+    #         return queryset
+    #     if request.user.role == '2':
+    #         return queryset.filter()
+    #     queryset = queryset.filter(user=request.user)
+    #     return queryset
 
 
 @admin.register(Presbiterio)
@@ -71,6 +81,7 @@ class PresbiterioAdmin(admin.ModelAdmin):
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
     list_display = ('distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha', 'get_options')
+    list_display_links = None
 
     def has_change_permission(self, request, obj=None):
         if bool(request.user and obj and (
@@ -88,7 +99,9 @@ class PresbiterioAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        if request.user.role == '1' or request.user.is_superstar:
+        if request.user.is_superstar:
             return queryset
-        queryset = queryset.filter(user=request.user)
-        return queryset
+        if request.user.role == '1':
+            distritos = Distrito.objects.filter(user_id=request.user)
+            return queryset.filter(distrito__in=distritos).distinct()
+        return queryset.filter(user=request.user)
