@@ -1,14 +1,13 @@
 from django.contrib import admin, messages
-from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
-from app_user.forms import UserForm, MyUserCreationForm
+from app_user.forms import UserForm, MyUserCreationForm, MyUserAuthenticationForm
 from app_user.models import User
 
 
 # Register your models here.
-@admin.register(User)
 class MyUserAdmin(UserAdmin):
     fieldsets = [
         (None, {"fields": ("username", "email", "password")}),
@@ -101,8 +100,9 @@ class MyUserAdmin(UserAdmin):
         return actions
 
 
+admin.site.register(User, MyUserAdmin)
 admin.site.unregister(Group)
-
+admin.site.login_form = MyUserAuthenticationForm
 
 # @admin.register(Group)
 # class MyGroupAdmin(GroupAdmin):
