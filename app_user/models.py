@@ -19,8 +19,8 @@ class User(AbstractUser):
     is_staff = models.BooleanField(
         _("staff status"), default=True, help_text=_("Designates whether the user can log into this admin site."), )
     role = models.CharField('Rol', choices=(
-        ('1', 'Jefe de Distrito'),
-        ('2', 'Jefe de Presbiterio'),
+        ('1', 'Superintendente '),
+        ('2', 'Presbítero'),
     ), max_length=2, default='2')
     image = models.ImageField('Foto de perfil', null=True, blank=True, upload_to='user/')
     REQUIRED_FIELDS = ['is_superstar', 'email']

@@ -24,8 +24,8 @@ class DistritoAdmin(admin.ModelAdmin):
         ('Asistencia / Bautizos',
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
-    readonly_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'bautizados_espiritu',
-                       'promedio_asistencia', 'cant_presbiterios', 'total_departamento')
+    readonly_fields = (
+        'fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'cant_presbiterios', 'total_departamento')
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
@@ -75,8 +75,7 @@ class PresbiterioAdmin(admin.ModelAdmin):
         ('Asistencia / Bautizos',
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
-    readonly_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'bautizados_espiritu',
-                       'promedio_asistencia', 'total_departamento')
+    readonly_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'total_departamento')
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')

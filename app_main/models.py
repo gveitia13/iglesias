@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from crum import get_current_user
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
 
@@ -44,8 +45,10 @@ class Distrito(models.Model):
     caballeros = models.PositiveIntegerField()
     total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
     # Aistencia / Bautizados
-    promedio_asistencia = models.FloatField(null=True, blank=True)
-    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True)
+    promedio_asistencia = models.FloatField(null=True, blank=True,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
     # Liderazgo / Estudios Teológicos
     lideres_locales = models.PositiveIntegerField('Líderes locales')
     obreros_tiempo_completo = models.PositiveIntegerField()
@@ -121,8 +124,10 @@ class Presbiterio(models.Model):
     caballeros = models.PositiveIntegerField()
     total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
     # Aistencia / Bautizados
-    promedio_asistencia = models.FloatField(null=True, blank=True)
-    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True)
+    promedio_asistencia = models.FloatField(null=True, blank=True,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
     # Liderazgo / Estudios Teológicos
     lideres_locales = models.PositiveIntegerField('Líderes locales')
     obreros_tiempo_completo = models.PositiveIntegerField()
