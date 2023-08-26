@@ -11,7 +11,7 @@ from app_user.models import User
 class MyUserAdmin(UserAdmin):
     fieldsets = [
         (None, {"fields": ("username", "email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name",)}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", 'image', 'get_image')}),
         ('Permisos', {"fields":
             (
                 "is_active",
@@ -29,10 +29,9 @@ class MyUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ('last_login', 'date_joined',)
-    list_display = (
-        "username", "email", 'role', 'is_active')
-    list_display_links = ("username",)
+    readonly_fields = ('last_login', 'date_joined','get_image')
+    list_display = ('get_image', "username", "email", 'role', 'is_active')
+    list_display_links = ('get_image', "username",)
     list_filter = ("is_active", 'role')
     search_fields = ("username", "first_name", "last_name", "email",)
     filter_horizontal = (

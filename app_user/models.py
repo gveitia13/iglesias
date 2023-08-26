@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+
+from iglesias.settings import STATIC_URL
 
 
 class User(AbstractUser):
@@ -19,11 +22,27 @@ class User(AbstractUser):
         ('1', 'Jefe de Distrito'),
         ('2', 'Jefe de Presbiterio'),
     ), max_length=2, default='2')
+    image = models.ImageField('Foto de perfil', null=True, blank=True, upload_to='user/')
     REQUIRED_FIELDS = ['is_superstar', 'email']
 
     class Meta:
         verbose_name = 'Usuario'
         ordering = ('-is_superstar', '-is_active')
+
+    def get_image(self):
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" class="img-fluid rounded-pill" '
+                             f'style="height:50px;width:50px;"> </img>')
+        return mark_safe(
+            f'<img src="{STATIC_URL}admin/img/unknown.png" class="img-fluid rounded-pill" '
+            f'style="height:50px;width:50px;"> </img>')
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return STATIC_URL + 'admin/img/unknown.png'
+
+    get_image.short_description = 'Foto de perfil'
 
     def __str__(self):
         return self.username

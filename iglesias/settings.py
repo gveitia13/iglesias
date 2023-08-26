@@ -13,7 +13,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -66,7 +65,7 @@ JAZZMIN_SETTINGS = {
     'copyright': 'By GoDjango',
     'custom_js': 'admin/js/admin.js',
     # "search_model": ["auth.User", "auth.Group"],
-    # "user_avatar": 'get_profile_photo',
+    "user_avatar": 'get_image_url',
     "icons": {
         "auth": "fas fa-users-cog",
         "user.User": "fas fa-user",
