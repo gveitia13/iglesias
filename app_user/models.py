@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from app_main.models import Distrito
 from iglesias.settings import STATIC_URL
 
 
@@ -21,8 +22,9 @@ class User(AbstractUser):
     role = models.CharField('Rol', choices=(
         ('1', 'Superintendente '),
         ('2', 'Presbítero'),
-    ), max_length=2, default='2')
+    ), max_length=2, null=True, blank=True)
     image = models.ImageField('Foto de perfil', null=True, blank=True, upload_to='user/')
+    distrito = models.ForeignKey(Distrito, on_delete=models.SET_NULL, null=True, blank=True)
     REQUIRED_FIELDS = ['is_superstar', 'email']
 
     class Meta:

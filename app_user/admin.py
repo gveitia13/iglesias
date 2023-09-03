@@ -10,7 +10,7 @@ from app_user.models import User
 # Register your models here.
 class MyUserAdmin(UserAdmin):
     fieldsets = [
-        (None, {"fields": ("username", "email", "password")}),
+        (None, {"fields": ("username", "email", "password", 'distrito')}),
         (_("Personal info"), {"fields": ("first_name", "last_name", 'image', 'get_image')}),
         ('Permisos', {"fields":
             (
@@ -29,10 +29,10 @@ class MyUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ('last_login', 'date_joined','get_image')
-    list_display = ('get_image', "username", "email", 'role', 'is_active')
-    list_display_links = ('get_image', "username",)
-    list_filter = ("is_active", 'role')
+    readonly_fields = ['last_login', 'date_joined', 'get_image', 'distrito']
+    list_display = ('get_image', 'distrito', "username", "email", 'role', 'is_active')
+    list_display_links = ('get_image', "username", 'distrito')
+    list_filter = ("is_active", 'role',)
     search_fields = ("username", "first_name", "last_name", "email",)
     filter_horizontal = (
         "groups",
@@ -42,6 +42,12 @@ class MyUserAdmin(UserAdmin):
     ordering = ('-is_superstar', '-is_active')
     form = UserForm
     add_form = MyUserCreationForm
+
+    def get_readonly_fields(self, request, obj=None):
+        read_only = super().get_readonly_fields(request, obj)
+        if request.user.is_superstar:
+            read_only = [r for r in read_only if r != 'distrito']
+        return read_only
 
     def has_add_permission(self, request):
         if bool(request.user and not request.user.is_superstar):

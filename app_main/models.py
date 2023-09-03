@@ -9,8 +9,6 @@ from iglesias import settings
 
 
 class Distrito(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Usuario', on_delete=models.SET_NULL, null=True,
-                             blank=True)
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
@@ -54,33 +52,32 @@ class Distrito(models.Model):
     obreros_tiempo_completo = models.PositiveIntegerField()
     estudiantes = models.PositiveIntegerField()
 
-    def get_cant_presbiterios(self):
-        return self.presbiterio_set.count()
+    # def get_cant_presbiterios(self):
+    #     return self.presbiterio_set.count()
 
     def __str__(self):
         return f'{self.distrito}'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        user = get_current_user()
-        if not self.user:
-            self.user = user
         self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
         self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
         self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
-        if self.pk:
-            self.cant_presbiterios = self.presbiterio_set.count()
+        # if self.pk:
+        #     self.cant_presbiterios = self.presbiterio_set.count()
         return super().save()
 
     def get_options(self):
         user = get_current_user()
-        html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
+        html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i ' \
+               f'class="fas fa-edit"></i></a>'
         if user.is_superstar or user.role == '1':
-            html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>'
+            html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i ' \
+                    f'class="fas fa-trash-alt"></i></a>'
         html = '<div class="d-flex">' + html + '</div>'
         return mark_safe(html)
 
     get_options.short_description = 'Opciones'
-    get_cant_presbiterios.short_description = 'Cantidad de presbiterios'
+    # get_cant_presbiterios.short_description = 'Cantidad de presbiterios'
 
     class Meta:
         ordering = ('distrito',)
@@ -91,7 +88,7 @@ class Presbiterio(models.Model):
                              blank=True)
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
-    distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
+    # distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE, null=True, blank=True)
 
     fecha = models.DateField('Fecha de creación', auto_now_add=True,
                              help_text='Se autosignará la fecha cuando sea creado')
@@ -151,7 +148,11 @@ class Presbiterio(models.Model):
             f'<div class="d-flex"><a href="/admin/app_main/presbiterio/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
             f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a></div>')
 
+    def get_distrito(self):
+        return self.user.distrito
+
     get_options.short_description = 'Opciones'
+    get_distrito.short_description = 'Distrito'
 
     class Meta:
-        ordering = ('distrito', 'user')
+        ordering = ('user',)
