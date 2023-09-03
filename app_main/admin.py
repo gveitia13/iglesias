@@ -34,27 +34,29 @@ class DistritoAdmin(admin.ModelAdmin):
     list_display_links = None
 
     def has_add_permission(self, request):
-        return bool(request.user and (request.user.is_superstar or request.user.role == '1'))
+        return bool(request.user and request.user.is_superstar)
 
-    # def has_change_permission(self, request, obj=None):
-    #     return bool(request.user and obj and (
-    #             request.user.is_superstar or (
-    #             request.user.role == '1' and obj.user == request.user)))
-    #
-    # def has_delete_permission(self, request, obj=None):
-    #     return bool(request.user and obj and (
-    #             request.user.is_superstar or (
-    #             request.user.role == '1' and obj.user == request.user)))
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+        if bool(user and obj and user.is_superstar):
+            return True
+        if obj and (user in obj.user_set.all()):
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        user = request.user
+        if bool(user and obj and user.is_superstar):
+            return True
+        if obj and (user in obj.user_set.all()):
+            return True
+        return False
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if request.user.is_superstar:
             return queryset
-        if request.user.role == '2':
-            from app_user.models import User
-            return queryset.filter()
-
-        return queryset
+        return queryset.filter(user=request.user)
 
 
 @admin.register(Presbiterio)

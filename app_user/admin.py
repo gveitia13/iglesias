@@ -79,9 +79,12 @@ class MyUserAdmin(UserAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        if bool(request.user and not request.user.is_superstar):
-            return qs.filter(is_superstar=False)
-        return qs
+        if request.user and request.user.is_superstar:
+            return qs
+        if request.user.role == '1' or request.user.role == '2':
+            if request.user.distrito:
+                return request.user.distrito.user_set.filter(is_superstar=False)
+        return User.objects.none()
 
     def get_list_display(self, request):
         list = super().get_list_display(request)

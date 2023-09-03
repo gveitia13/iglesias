@@ -70,13 +70,14 @@ class Distrito(models.Model):
         user = get_current_user()
         html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i ' \
                f'class="fas fa-edit"></i></a>'
-        if user.is_superstar or user.role == '1':
+        if user.is_superstar or user in self.user_set.all():
             html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i ' \
                     f'class="fas fa-trash-alt"></i></a>'
         html = '<div class="d-flex">' + html + '</div>'
         return mark_safe(html)
 
     get_options.short_description = 'Opciones'
+
     # get_cant_presbiterios.short_description = 'Cantidad de presbiterios'
 
     class Meta:
