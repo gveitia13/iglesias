@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view, APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from app_main.api.permissions import IsOwnerOrAdminUser
 from app_main.models import Distrito, Presbiterio
@@ -42,3 +44,10 @@ class UserVS(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.exclude(is_superstar=True)
+
+
+@api_view()
+def get_distrito(request):
+    if request.user.is_authenticated:
+        return Response(request.user.distrito.__str__(), status=status.HTTP_200_OK)
+    return Response({'error': 'Debe autenticarse'}, status=status.HTTP_401_UNAUTHORIZED)
