@@ -70,7 +70,7 @@ class Distrito(models.Model):
         user = get_current_user()
         html = f'<a href="/admin/app_main/distrito/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i ' \
                f'class="fas fa-edit"></i></a>'
-        if user.is_superstar or user in self.user_set.all():
+        if user.is_superstar or (user in self.user_set.all() and user.role == '1'):
             html += f'<a href="/admin/app_main/distrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i ' \
                     f'class="fas fa-trash-alt"></i></a>'
         html = '<div class="d-flex">' + html + '</div>'
@@ -145,12 +145,19 @@ class Presbiterio(models.Model):
         return super().save()
 
     def get_options(self):
-        return mark_safe(
-            f'<div class="d-flex"><a href="/admin/app_main/presbiterio/{self.pk}/change/" class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
-            f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a></div>')
+        user = get_current_user()
+        html = f'<div class="d-flex"><a href="/admin/app_main/presbiterio/{self.pk}/change/" ' \
+               f'class="btn m-1 btn-sm btn-warning"><i class="fas fa-edit"></i></a>'
+
+        if user.is_superstar or (user.role == '2' and self.user == user):
+            html += f'<a href="/admin/app_main/presbiterio/{self.pk}/delete/" ' \
+                    f'class="btn m-1 btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a></div>'
+        html = '<div class="d-flex">' + html + '</div>'
+        return mark_safe(html)
 
     def get_distrito(self):
-        return self.user.distrito
+        user = get_current_user()
+        return user.distrito
 
     get_options.short_description = 'Opciones'
     get_distrito.short_description = 'Distrito'

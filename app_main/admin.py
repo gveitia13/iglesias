@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.db.models import QuerySet
 
 from app_main.models import Distrito, Presbiterio
 
@@ -40,7 +39,7 @@ class DistritoAdmin(admin.ModelAdmin):
         user = request.user
         if bool(user and obj and user.is_superstar):
             return True
-        if obj and (user in obj.user_set.all()):
+        if obj and (user in obj.user_set.all()) and user.role == '1':
             return True
         return False
 
@@ -48,7 +47,7 @@ class DistritoAdmin(admin.ModelAdmin):
         user = request.user
         if bool(user and obj and user.is_superstar):
             return True
-        if obj and (user in obj.user_set.all()):
+        if obj and (user in obj.user_set.all()) and user.role == '1':
             return True
         return False
 
@@ -87,25 +86,32 @@ class PresbiterioAdmin(admin.ModelAdmin):
     list_display = ('get_distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha', 'get_options')
     list_display_links = None
 
+    def has_add_permission(self, request):
+        if request.user.is_superstar or (request.user.role == '2' and request.user.distrito):
+            return True
+        return False
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        user = request.user
+        if user.is_superstar:
+            return qs
+        if (user.role == '2' or user.role == '1') and user.distrito:
+            distrito = user.distrito
+            users = distrito.user_set.all()
+            qs = qs.filter(user__in=users)
+        else:
+            qs = qs.none()
+        return qs
+
     def has_change_permission(self, request, obj=None):
-        if bool(request.user and obj and (
-                request.user.is_superstar or request.user.role == '1' or (
+        if bool(request.user and obj and (request.user.is_superstar or (
                 request.user.role == '2' and obj.user == request.user))):
             return True
         return False
 
     def has_delete_permission(self, request, obj=None):
-        if bool(request.user and obj and (
-                request.user.is_superstar or request.user.role == '1' or (
+        if bool(request.user and obj and (request.user.is_superstar or (
                 request.user.role == '2' and obj.user == request.user))):
             return True
         return False
-
-    # def get_queryset(self, request):
-    #     queryset = super().get_queryset(request)
-    #     if request.user.is_superstar:
-    #         return queryset
-    #     if request.user.role == '1':
-    #         distritos = Distrito.objects.filter(user_id=request.user)
-    #         return queryset.filter(distrito__in=distritos).distinct()
-    #     return queryset.filter(user=request.user)
