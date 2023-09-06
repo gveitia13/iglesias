@@ -24,8 +24,13 @@ class DistritoAdmin(admin.ModelAdmin):
         ('Asistencia / Bautizos',
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
-    readonly_fields = (
-        'fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'cant_presbiterios', 'total_departamento')
+    readonly_fields = ('fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'cant_presbiterios',
+                       'total_departamento', 'presbiteriales', 'nacionales', 'licenciados', 'ordenados',
+                       'total_cuerpo_ministerial', 'templos_oficiales', 'templos_no_oficiales', 'casa_templo',
+                       'tabernaculos', 'casas_pastorales', 'iglesias', 'misiones', 'casas_cultos', 'ministros',
+                       'miembros', 'visitantes', 'ninnos', 'total_afiliacion_oficial', 'jovenes', 'damas', 'caballeros',
+                       'total_departamento', 'promedio_asistencia', 'bautizados_espiritu', 'lideres_locales',
+                       'obreros_tiempo_completo', 'estudiantes')
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
@@ -87,7 +92,7 @@ class PresbiterioAdmin(admin.ModelAdmin):
     list_display_links = None
 
     def has_add_permission(self, request):
-        if request.user.is_superstar or (request.user.role == '2' and request.user.distrito):
+        if request.user.role == '2' and request.user.distrito:
             return True
         return False
 

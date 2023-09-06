@@ -16,55 +16,47 @@ class Distrito(models.Model):
                              help_text='Se autosignará la fecha cuando sea creado')
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
-    presbiteriales = models.PositiveIntegerField()
-    nacionales = models.PositiveIntegerField()
-    licenciados = models.PositiveIntegerField()
-    ordenados = models.PositiveIntegerField()
+    presbiteriales = models.PositiveIntegerField(default=0)
+    nacionales = models.PositiveIntegerField(default=0)
+    licenciados = models.PositiveIntegerField(default=0)
+    ordenados = models.PositiveIntegerField(default=0)
     total_cuerpo_ministerial = models.PositiveIntegerField(blank=True, null=True)
     # Patrimonio de la organization
-    templos_oficiales = models.PositiveIntegerField()
-    templos_no_oficiales = models.PositiveIntegerField()
-    casa_templo = models.PositiveIntegerField()
-    tabernaculos = models.PositiveIntegerField('Tabernáculos/Naves')
-    casas_pastorales = models.PositiveIntegerField()
+    templos_oficiales = models.PositiveIntegerField(default=0)
+    templos_no_oficiales = models.PositiveIntegerField(default=0)
+    casa_templo = models.PositiveIntegerField(default=0)
+    tabernaculos = models.PositiveIntegerField('Tabernáculos/Naves', default=0)
+    casas_pastorales = models.PositiveIntegerField(default=0)
     # Congregaciones / Lugares de predicación
-    iglesias = models.PositiveIntegerField()
-    misiones = models.PositiveIntegerField()
-    casas_cultos = models.PositiveIntegerField('Casas Cultos/Células')
+    iglesias = models.PositiveIntegerField(default=0)
+    misiones = models.PositiveIntegerField(default=0)
+    casas_cultos = models.PositiveIntegerField('Casas Cultos/Células', default=0)
     # Afiliacion oficial
-    ministros = models.PositiveIntegerField()
-    miembros = models.PositiveIntegerField()
-    visitantes = models.PositiveIntegerField()
-    ninnos = models.PositiveIntegerField('Niños')
-    total_afiliacion_oficial = models.PositiveIntegerField('Total afiliación oficial')
+    ministros = models.PositiveIntegerField(default=0)
+    miembros = models.PositiveIntegerField(default=0)
+    visitantes = models.PositiveIntegerField(default=0)
+    ninnos = models.PositiveIntegerField('Niños', default=0)
+    total_afiliacion_oficial = models.PositiveIntegerField('Total afiliación oficial', default=0)
     # Departamentos / Ministerios
-    jovenes = models.PositiveIntegerField('Jóvenes')
-    damas = models.PositiveIntegerField()
-    caballeros = models.PositiveIntegerField()
+    jovenes = models.PositiveIntegerField('Jóvenes', default=0)
+    damas = models.PositiveIntegerField(default=0)
+    caballeros = models.PositiveIntegerField(default=0)
     total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
     # Aistencia / Bautizados
-    promedio_asistencia = models.FloatField(null=True, blank=True,
+    promedio_asistencia = models.FloatField(null=True, blank=True, default=0,
                                             validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
-    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True,
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True, default=0,
                                             validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
     # Liderazgo / Estudios Teológicos
-    lideres_locales = models.PositiveIntegerField('Líderes locales')
-    obreros_tiempo_completo = models.PositiveIntegerField()
-    estudiantes = models.PositiveIntegerField()
+    lideres_locales = models.PositiveIntegerField('Líderes locales', default=0)
+    obreros_tiempo_completo = models.PositiveIntegerField(default=0)
+    estudiantes = models.PositiveIntegerField(default=0)
 
     # def get_cant_presbiterios(self):
     #     return self.presbiterio_set.count()
 
     def __str__(self):
         return f'{self.distrito}'
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.total_cuerpo_ministerial = self.presbiteriales + self.nacionales + self.licenciados + self.ordenados
-        self.total_afiliacion_oficial = self.ministros + self.miembros + self.visitantes + self.ninnos
-        self.total_departamento = self.jovenes + self.damas + self.caballeros + self.ninnos
-        # if self.pk:
-        #     self.cant_presbiterios = self.presbiterio_set.count()
-        return super().save()
 
     def get_options(self):
         user = get_current_user()
@@ -156,6 +148,8 @@ class Presbiterio(models.Model):
         return mark_safe(html)
 
     def get_distrito(self):
+        if self.user:
+            return self.user.distrito
         user = get_current_user()
         return user.distrito
 
