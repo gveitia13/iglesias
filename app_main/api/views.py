@@ -22,9 +22,13 @@ class PresbiterioVS(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
-            if bool(self.request.user.is_superstar or self.request.user.role == '1'):
+            if bool(self.request.user.is_superstar):
                 return queryset
-            return queryset.filter(user=self.request.user)
+            if (self.request.user.role == '2' or self.request.user.role == '2') and self.request.user.distrito:
+                distrito = self.request.user.distrito
+                users = distrito.user_set.all()
+                return queryset.filter(user__in=users)
+        return queryset.none()
 
 
 userModel = get_user_model()
