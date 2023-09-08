@@ -41,7 +41,8 @@ class Distrito(models.Model):
     jovenes = models.PositiveIntegerField('Jóvenes', default=0)
     damas = models.PositiveIntegerField(default=0)
     caballeros = models.PositiveIntegerField(default=0)
-    total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños')
+    total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños',
+                                                     default=0)
     # Aistencia / Bautizados
     promedio_asistencia = models.FloatField(null=True, blank=True, default=0,
                                             validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
