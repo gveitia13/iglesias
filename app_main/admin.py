@@ -126,7 +126,7 @@ class PresbiterioAdmin(admin.ModelAdmin):
 @admin.register(ResumenDistrito)
 class ResumenDistritoAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Principal', {'fields': ('distrito', 'fecha', 'cant_presbiterios', 'cantidad_meses')}),
+        ('Principal', {'fields': ('distrito', 'fecha', 'fecha_resumen', 'cant_presbiterios', 'cantidad_meses')}),
         ('Datos personales',
          {'fields': ('nombre', 'apellidos',)}),
         ('Cuerpo Ministerial',
@@ -144,5 +144,5 @@ class ResumenDistritoAdmin(admin.ModelAdmin):
         ('Asistencia / Bautizos',
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
-    list_display = ('__str__', 'fecha', 'cantidad_meses', 'get_options')
+    list_display = ('__str__', 'fecha_resumen', 'cantidad_meses', 'get_options')
     readonly_fields = [attr for attr in ResumenDistrito.__dict__.keys()]

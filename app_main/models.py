@@ -165,7 +165,8 @@ class ResumenDistrito(models.Model):
     nombre = models.CharField('Nombre', max_length=100)
     apellidos = models.CharField('Apellidos', max_length=100)
     distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
-    fecha = models.DateField('Fecha de creación', auto_now_add=True,)
+    fecha = models.DateField('Fecha del Distrito')
+    fecha_resumen = models.DateField('Fecha del Resumen', auto_now_add=True, )
     cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
     # Cuerpo ministerial
     presbiteriales = models.PositiveIntegerField(default=0)
@@ -205,6 +206,7 @@ class ResumenDistrito(models.Model):
     obreros_tiempo_completo = models.PositiveIntegerField(default=0)
     estudiantes = models.PositiveIntegerField(default=0)
     cantidad_meses = models.PositiveSmallIntegerField('Cantidad de meses del corte')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'Resumen del {self.distrito}'

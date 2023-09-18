@@ -18,5 +18,6 @@ def generar_reporte(request):
     for a in attrs:
         setattr(resumen, a, getattr(distrito, a))
     resumen.cantidad_meses = int(request.POST['meses'])
+    resumen.user = user
     resumen.save()
     return redirect('/admin/app_main/resumendistrito/')
