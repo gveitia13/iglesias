@@ -1,0 +1,53 @@
+{% extends 'admin/change_list.html' %}
+{% load admin_list %}
+{% block page_actions %}
+    <div class="col-12 col-md-auto d-flex align-items-center justify-content-end page-actions">
+        {% block object-tools %}
+            {% block object-tools-items %}
+                {{ block.super }}
+            {% endblock %}
+        {% endblock %}
+    </div>
+    <div class="col-12 col-md-5 pt-2 text-right">
+        <div class="card">
+            <div class="card-header pb-0 text-center">
+                <span class="card-title float-none text-center">Generar reportes de Distritos</span>
+            </div>
+            <div class="card-body py-0">
+                <form method="post" enctype="multipart/form-data" action="{% url 'generar_reporte' %}">
+                    {% csrf_token %}
+                    <div class="form-row align-items-center">
+                        <div class="col-12 my-1 form-group text-center">
+                            <label for="meses">Seleccione la cantidad de meses</label>
+                            <div class="d-flex justify-content-around">
+                                <select class="form-control w-auto" required name="meses" id="meses">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">Generar</button>
+                            </div>
+                        </div>
+                        {#                        <div class="col-4 my-1 text-right">#}
+                        {#                        </div>#}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block result_list %}
+
+    {{ block.super }}
+{% endblock %}

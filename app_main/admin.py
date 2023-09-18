@@ -36,6 +36,7 @@ class DistritoAdmin(admin.ModelAdmin):
     list_filter = ('distrito', 'fecha')
     list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'get_options')
     list_display_links = None
+    change_list_template = 'admin/distrito_change_list.html'
 
     def has_add_permission(self, request):
         return bool(request.user and request.user.is_superstar)
