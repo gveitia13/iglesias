@@ -159,3 +159,63 @@ class Presbiterio(models.Model):
 
     class Meta:
         ordering = ('user',)
+
+
+class ResumenDistrito(models.Model):
+    nombre = models.CharField('Nombre', max_length=100)
+    apellidos = models.CharField('Apellidos', max_length=100)
+    distrito = models.CharField('Distrito', max_length=100, null=True, blank=True)
+    fecha = models.DateField('Fecha de creación', auto_now_add=True,)
+    cant_presbiterios = models.PositiveIntegerField('Cantidad de presbiterios', default=0, null=True, blank=True)
+    # Cuerpo ministerial
+    presbiteriales = models.PositiveIntegerField(default=0)
+    nacionales = models.PositiveIntegerField(default=0)
+    licenciados = models.PositiveIntegerField(default=0)
+    ordenados = models.PositiveIntegerField(default=0)
+    total_cuerpo_ministerial = models.PositiveIntegerField(blank=True, null=True)
+    # Patrimonio de la organization
+    templos_oficiales = models.PositiveIntegerField(default=0)
+    templos_no_oficiales = models.PositiveIntegerField(default=0)
+    casa_templo = models.PositiveIntegerField(default=0)
+    tabernaculos = models.PositiveIntegerField('Tabernáculos/Naves', default=0)
+    casas_pastorales = models.PositiveIntegerField(default=0)
+    # Congregaciones / Lugares de predicación
+    iglesias = models.PositiveIntegerField(default=0)
+    misiones = models.PositiveIntegerField(default=0)
+    casas_cultos = models.PositiveIntegerField('Casas Cultos/Células', default=0)
+    # Afiliacion oficial
+    ministros = models.PositiveIntegerField(default=0)
+    miembros = models.PositiveIntegerField(default=0)
+    visitantes = models.PositiveIntegerField(default=0)
+    ninnos = models.PositiveIntegerField('Niños', default=0)
+    total_afiliacion_oficial = models.PositiveIntegerField('Total afiliación oficial', default=0)
+    # Departamentos / Ministerios
+    jovenes = models.PositiveIntegerField('Jóvenes', default=0)
+    damas = models.PositiveIntegerField(default=0)
+    caballeros = models.PositiveIntegerField(default=0)
+    total_departamento = models.PositiveIntegerField('Total Departamento / Ministerios', help_text='Incluye niños',
+                                                     default=0)
+    # Aistencia / Bautizados
+    promedio_asistencia = models.FloatField(null=True, blank=True, default=0,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
+    bautizados_espiritu = models.FloatField('Bautizados Espíritu', null=True, blank=True, default=0,
+                                            validators=[MinValueValidator(0, 'Debe ser mayor o igual a cero')])
+    # Liderazgo / Estudios Teológicos
+    lideres_locales = models.PositiveIntegerField('Líderes locales', default=0)
+    obreros_tiempo_completo = models.PositiveIntegerField(default=0)
+    estudiantes = models.PositiveIntegerField(default=0)
+    cantidad_meses = models.PositiveSmallIntegerField('Cantidad de meses del corte')
+
+    def __str__(self):
+        return f'Resumen del {self.distrito}'
+
+    def get_options(self):
+        html = f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
+               f'class="fas fa-file-pdf"></i> PDF</a>'
+
+        html += f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
+                f'class="fas fa-print"></i> Imprimir</a>'
+        html = '<div class="d-flex">' + html + '</div>'
+        return mark_safe(html)
+
+    get_options.short_description = 'Opciones'

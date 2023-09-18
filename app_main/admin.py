@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app_main.models import Distrito, Presbiterio
+from app_main.models import Distrito, Presbiterio, ResumenDistrito
 
 
 # Register your models here.
@@ -121,3 +121,28 @@ class PresbiterioAdmin(admin.ModelAdmin):
                 request.user.role == '2' and obj.user == request.user))):
             return True
         return False
+
+
+@admin.register(ResumenDistrito)
+class ResumenDistritoAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Principal', {'fields': ('distrito', 'fecha', 'cant_presbiterios', 'cantidad_meses')}),
+        ('Datos personales',
+         {'fields': ('nombre', 'apellidos',)}),
+        ('Cuerpo Ministerial',
+         {'fields': ('presbiteriales', 'nacionales', 'licenciados', 'ordenados', 'total_cuerpo_ministerial')}),
+        ('Patrimonio de la organización',
+         {'fields': ('templos_oficiales', 'templos_no_oficiales', 'casa_templo', 'tabernaculos', 'casas_pastorales')}),
+        ('Congregaciones / Lugares de predicación',
+         {'fields': ('iglesias', 'misiones', 'casas_cultos',)}),
+        ('Afiliación oficial',
+         {'fields': ('ministros', 'miembros', 'visitantes', 'ninnos', 'total_afiliacion_oficial')}),
+        ('Departamentos / Ministerios',
+         {'fields': ('jovenes', 'damas', 'caballeros', 'total_departamento')}),
+        ('Liderazgo / Estudios Teológicos',
+         {'fields': ('lideres_locales', 'obreros_tiempo_completo', 'estudiantes')}),
+        ('Asistencia / Bautizos',
+         {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
+    ]
+    list_display = ('__str__', 'fecha', 'cantidad_meses', 'get_options')
+    readonly_fields = [attr for attr in ResumenDistrito.__dict__.keys()]
