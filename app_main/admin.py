@@ -128,7 +128,7 @@ class ResumenDistritoAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Principal', {'fields': ('distrito', 'fecha', 'fecha_resumen', 'cant_presbiterios', 'cantidad_meses')}),
         ('Datos personales',
-         {'fields': ('nombre', 'apellidos',)}),
+         {'fields': ('nombre', 'apellidos', 'user')}),
         ('Cuerpo Ministerial',
          {'fields': ('presbiteriales', 'nacionales', 'licenciados', 'ordenados', 'total_cuerpo_ministerial')}),
         ('Patrimonio de la organización',
@@ -144,5 +144,30 @@ class ResumenDistritoAdmin(admin.ModelAdmin):
         ('Asistencia / Bautizos',
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
-    list_display = ('__str__', 'fecha_resumen', 'cantidad_meses', 'get_options')
+    list_display = ('__str__', 'user', 'fecha_resumen', 'cantidad_meses', 'get_options')
     readonly_fields = [attr for attr in ResumenDistrito.__dict__.keys()]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        user = request.user
+        if bool(user and obj and user.is_superstar):
+            return True
+        if obj and (obj.user == user):
+            return True
+        return False
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        user = request.user
+        return qs if user.is_superstar else qs.filter(user=user)
+
+    def has_view_permission(self, request, obj=None):
+        user = request.user
+        if bool(user and (user.is_superstar or user.role == '1')):
+            return True
+        return False

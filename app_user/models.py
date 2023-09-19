@@ -20,7 +20,7 @@ class User(AbstractUser):
     is_staff = models.BooleanField(
         _("staff status"), default=True, help_text=_("Designates whether the user can log into this admin site."), )
     role = models.CharField('Rol', choices=(
-        ('1', 'Superintendente '),
+        ('1', 'Superintendente'),
         ('2', 'Presbítero'),
     ), max_length=2, null=True, blank=True)
     image = models.ImageField('Foto de perfil', null=True, blank=True, upload_to='user/')

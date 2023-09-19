@@ -11,13 +11,13 @@ from app_user.models import User
 class MyUserAdmin(UserAdmin):
     fieldsets = [
         (None, {"fields": ("username", "email", "password", 'distrito')}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", 'image', 'get_image')}),
         ('Permisos', {"fields":
             (
                 "is_active",
                 'is_superstar',
                 'role',
             ), },),
+        (_("Personal info"), {"fields": ("first_name", "last_name", 'image', 'get_image')}),
         ('Fechas importantes', {"fields": ("last_login", "date_joined")}),
     ]
     add_fieldsets = (

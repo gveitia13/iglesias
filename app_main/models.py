@@ -205,18 +205,22 @@ class ResumenDistrito(models.Model):
     lideres_locales = models.PositiveIntegerField('Líderes locales', default=0)
     obreros_tiempo_completo = models.PositiveIntegerField(default=0)
     estudiantes = models.PositiveIntegerField(default=0)
-    cantidad_meses = models.PositiveSmallIntegerField('Cantidad de meses del corte')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    cantidad_meses = models.PositiveSmallIntegerField('Meses del corte')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                             verbose_name='Superintendente')
 
     def __str__(self):
         return f'Resumen del {self.distrito}'
 
     def get_options(self):
+        user = get_current_user()
         html = f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
                f'class="fas fa-file-pdf"></i> PDF</a>'
-
         html += f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
                 f'class="fas fa-print"></i> Imprimir</a>'
+        if self.user == user or user.is_superstar:
+            html += f'<a href="/admin/app_main/resumendistrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i ' \
+                    f'class="fas fa-trash-alt"></i></a>'
         html = '<div class="d-flex">' + html + '</div>'
         return mark_safe(html)
 
