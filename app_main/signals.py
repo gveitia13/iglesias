@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from app_main.models import Presbiterio
 
 
-def calculate(instance):
+def calculate(instance, is_delete=False):
     user = instance.user
     distrito = user.distrito
     users = distrito.user_set.all()
@@ -37,6 +37,8 @@ def calculate(instance):
     distrito.lideres_locales = 0
     distrito.obreros_tiempo_completo = 0
     distrito.estudiantes = 0
+    if not is_delete:
+        distrito.evaluado = False
     distrito.save()
 
     for user in users:
@@ -80,6 +82,8 @@ def calculate(instance):
         distrito.obreros_tiempo_completo += sum(
             [i[0] for i in user.presbiterio_set.all().values_list('obreros_tiempo_completo') if i[0]])
         distrito.estudiantes += sum([i[0] for i in user.presbiterio_set.all().values_list('estudiantes') if i[0]])
+        if not is_delete:
+            distrito.evaluado = False
         distrito.save()
 
 
@@ -90,4 +94,4 @@ def update_distrito_on_save_presbiterios(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Presbiterio)
 def update_distrito_on_delete_presbiterios(sender, instance, *args, **kwargs):
-    calculate(instance)
+    calculate(instance, True)

@@ -8,7 +8,7 @@ from app_main.models import Distrito, Presbiterio, ResumenDistrito
 class DistritoAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Datos personales',
-         {'fields': ('nombre', 'apellidos', 'distrito', 'fecha', 'cant_presbiterios')}),
+         {'fields': ('nombre', 'apellidos', 'distrito', 'fecha', 'cant_presbiterios', 'evaluado')}),
         ('Cuerpo Ministerial',
          {'fields': ('presbiteriales', 'nacionales', 'licenciados', 'ordenados', 'total_cuerpo_ministerial')}),
         ('Patrimonio de la organización',
@@ -30,11 +30,11 @@ class DistritoAdmin(admin.ModelAdmin):
                        'tabernaculos', 'casas_pastorales', 'iglesias', 'misiones', 'casas_cultos', 'ministros',
                        'miembros', 'visitantes', 'ninnos', 'total_afiliacion_oficial', 'jovenes', 'damas', 'caballeros',
                        'total_departamento', 'promedio_asistencia', 'bautizados_espiritu', 'lideres_locales',
-                       'obreros_tiempo_completo', 'estudiantes')
+                       'obreros_tiempo_completo', 'estudiantes', 'evaluado')
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('distrito', 'fecha')
-    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'get_options')
+    list_display = ('distrito', 'cant_presbiterios', 'nombre', 'apellidos', 'fecha', 'evaluado', 'get_options')
     list_display_links = None
     change_list_template = 'admin/distrito_change_list.html'
 
@@ -68,7 +68,7 @@ class DistritoAdmin(admin.ModelAdmin):
 class PresbiterioAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Datos personales',
-         {'fields': ('get_distrito', 'nombre', 'apellidos', 'presbiterio', 'fecha')}),
+         {'fields': ('get_distrito', 'nombre', 'apellidos', 'presbiterio', 'evaluado', 'fecha')}),
         ('Cuerpo Ministerial',
          {'fields': ('presbiteriales', 'nacionales', 'licenciados', 'ordenados', 'total_cuerpo_ministerial')}),
         ('Patrimonio de la organización',
@@ -85,11 +85,12 @@ class PresbiterioAdmin(admin.ModelAdmin):
          {'fields': ('promedio_asistencia', 'bautizados_espiritu',)}),
     ]
     readonly_fields = (
-        'get_distrito', 'fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'total_departamento')
+        'get_distrito', 'fecha', 'total_cuerpo_ministerial', 'total_afiliacion_oficial', 'total_departamento',
+        'evaluado')
 
     search_fields = ('presbiterio', 'fecha')
     list_filter = ('fecha',)
-    list_display = ('get_distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha', 'get_options')
+    list_display = ('get_distrito', 'presbiterio', 'user', 'nombre', 'apellidos', 'fecha', 'evaluado', 'get_options')
     list_display_links = None
 
     def has_add_permission(self, request):
@@ -111,6 +112,8 @@ class PresbiterioAdmin(admin.ModelAdmin):
         return qs
 
     def has_change_permission(self, request, obj=None):
+        if obj and obj.evaluado:
+            return False
         if bool(request.user and obj and (request.user.is_superstar or (
                 request.user.role == '2' and obj.user == request.user))):
             return True

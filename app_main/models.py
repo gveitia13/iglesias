@@ -52,6 +52,7 @@ class Distrito(models.Model):
     lideres_locales = models.PositiveIntegerField('Líderes locales', default=0)
     obreros_tiempo_completo = models.PositiveIntegerField(default=0)
     estudiantes = models.PositiveIntegerField(default=0)
+    evaluado = models.BooleanField(default=False)
 
     # def get_cant_presbiterios(self):
     #     return self.presbiterio_set.count()
@@ -123,6 +124,7 @@ class Presbiterio(models.Model):
     lideres_locales = models.PositiveIntegerField('Líderes locales')
     obreros_tiempo_completo = models.PositiveIntegerField()
     estudiantes = models.PositiveIntegerField()
+    evaluado = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Presbiterio - {self.presbiterio}: {self.fecha}'
