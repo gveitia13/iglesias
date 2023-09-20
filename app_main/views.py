@@ -1,5 +1,7 @@
+import datetime
+
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from app_main.models import ResumenDistrito
 from app_user.models import User
@@ -34,8 +36,16 @@ def generar_reporte(request):
         if a not in ['nombre', 'apellidos', 'distrito', 'fecha', 'evaluado']:
             setattr(distrito, a, 0)
     distrito.evaluado = True
+    distrito.fecha = datetime.datetime.now()
     distrito.save()
 
     messages.success(request, f'Se creó un resumen de {request.POST["meses"]} meses. Los valores del Distrito '
                               f'se reiniciaron.')
     return redirect('/admin/app_main/resumendistrito/')
+
+
+def print_reporte(request, pk):
+    print(pk)
+    return render(request, 'reporte/reporte.html', {
+        'object': ResumenDistrito.objects.get(pk=pk),
+    })

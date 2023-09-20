@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'admin/img/logo.png' %}" type="image/x-icon">
+    {#    <link rel="stylesheet" href="{% static 'vendor/adminlte/css/adminlte.min.css' %}">#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <title>Resumen: {{ object.distrito }} | {{ object.fecha_resumen|date:'d-m-Y' }}</title>
+    <style>
+        @page {
+            size: A4;
+        {#margin: 1.0cm;#}
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            color: black;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .text-sm, table * {
+            font-size: .875rem !important
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" id="mi">
+    <br>
+    <H3 class="text-center">Resumen de Distrito {{ object.cantidad_meses }} {% if object.cantidad_meses == 1 %}
+        mes {% else %}meses{% endif %}</H3>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <p><b>Distrito: </b>{{ object.distrito }}</p>
+        <p><b>Cantidad de Presbiterios: </b>{{ object.cant_presbiterios }}</p>
+        <p><b>Fecha: </b>{{ object.fecha_resumen|date:'d \d\e M \d\e Y' }}</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="3">DATOS DEL SUPERINTENDENTE</th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Usuario</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.nombre }}</td>
+                <td>{{ object.apellidos }}</td>
+                <td>{{ object.user }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="5">CUERPO MINISTERIAL</th>
+            </tr>
+            <tr>
+                <th>Presbiteriales</th>
+                <th>Nacionales</th>
+                <th>Licenciados</th>
+                <th>Ordenados</th>
+                <th>TOTAL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.presbiteriales }}</td>
+                <td>{{ object.nacionales }}</td>
+                <td>{{ object.licenciados }}</td>
+                <td>{{ object.ordenados }}</td>
+                <td>{{ object.total_cuerpo_ministerial }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="5">PATRIMONIO DE LA ORGANIZACIÓN</th>
+            </tr>
+            <tr>
+                <th>Templos Oficiales</th>
+                <th>Templos no Oficiales</th>
+                <th>Casa-Templo</th>
+                <th>Tabernáculos / Naves</th>
+                <th>Casas Pastorales</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.templos_oficiales }}</td>
+                <td>{{ object.templos_no_oficiales }}</td>
+                <td>{{ object.casa_templo }}</td>
+                <td>{{ object.tabernaculos }}</td>
+                <td>{{ object.casas_pastorales }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="3">CONGREGACIONES / LUGARES DE PREDICACIÓN</th>
+            </tr>
+            <tr>
+                <th>Iglesias</th>
+                <th>Misiones</th>
+                <th>Casas Cultos / Células</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.iglesias }}</td>
+                <td>{{ object.misiones }}</td>
+                <td>{{ object.casas_cultos }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="5">AFILIACIÓN OFICIAL</th>
+            </tr>
+            <tr>
+                <th>Ministros</th>
+                <th>Miembros</th>
+                <th>Visitantes</th>
+                <th>Niños</th>
+                <th>TOTAL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.ministros }}</td>
+                <td>{{ object.miembros }}</td>
+                <td>{{ object.visitantes }}</td>
+                <td>{{ object.ninnos }}</td>
+                <td>{{ object.total_afiliacion_oficial }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="3">DEPARTAMENTOS / MINISTERIOS</th>
+                <th colspan="2">ASISTENCIAS / BAUTIZADOS</th>
+            </tr>
+            <tr>
+                <th>Jóvenes</th>
+                <th>Damas</th>
+                <th>Caballeros</th>
+                <th>Promedio de Asistencia</th>
+                <th>Bautizados Espíritu</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.jovenes }}</td>
+                <td>{{ object.damas }}</td>
+                <td>{{ object.caballeros }}</td>
+                <td>{{ object.promedio_asistencia }}</td>
+                <td>{{ object.bautizados_espiritu }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered border-dark text-center">
+            <thead>
+            <tr>
+                <th colspan="3">LIDERAZGOS / ESTUDIOS TEOLÓGICOS</th>
+            </tr>
+            <tr>
+                <th>Líderes Locales</th>
+                <th>Obreros a tiempo completo</th>
+                <th>Estudiantes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ object.lideres_locales }}</td>
+                <td>{{ object.obreros_tiempo_completo }}</td>
+                <td>{{ object.estudiantes }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    {#    <div id="ls" style="page-break-before: always;"></div>#}
+    {#    {% endfor %}#}
+
+</div>
+<script>
+    function printHTML() {
+        if (window.print) {
+            window.print();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        printHTML();
+    });
+</script>
+</body>
+</html>

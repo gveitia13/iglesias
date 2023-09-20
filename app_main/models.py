@@ -218,7 +218,7 @@ class ResumenDistrito(models.Model):
         user = get_current_user()
         html = f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
                f'class="fas fa-file-pdf"></i> PDF</a>'
-        html += f'<a href="#" class="btn m-1 btn-sm btn-info"><i ' \
+        html += f'<a href="/web/print_reporte/{self.pk}/" class="btn m-1 btn-sm btn-info"><i ' \
                 f'class="fas fa-print"></i> Imprimir</a>'
         if self.user == user or user.is_superstar:
             html += f'<a href="/admin/app_main/resumendistrito/{self.pk}/delete/" class="btn m-1 btn-sm btn-danger"><i ' \
