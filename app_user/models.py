@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -48,3 +49,15 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save()
+
+    def clean(self):
+        if self.role == '1':
+            distrito = Distrito.objects.get(pk=self.distrito_id)
+            if distrito.user_set.filter(role='1'):
+                raise ValidationError(
+                    {'role': 'El distrito asignado ya tiene un usuario con el rol Superintendente'})
+        return super().clean()
