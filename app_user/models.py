@@ -55,9 +55,12 @@ class User(AbstractUser):
         return super().save()
 
     def clean(self):
-        if self.role == '1':
-            distrito = Distrito.objects.get(pk=self.distrito_id)
-            if distrito.user_set.filter(role='1'):
-                raise ValidationError(
-                    {'role': 'El distrito asignado ya tiene un usuario con el rol Superintendente'})
+        from crum import get_current_user
+        user = get_current_user()
+        if user and user.is_superstar:
+            if self.role == '1':
+                distrito = Distrito.objects.get(pk=self.distrito_id)
+                if distrito.user_set.filter(role='1'):
+                    raise ValidationError(
+                        {'role': 'El distrito asignado ya tiene un usuario con el rol Superintendente'})
         return super().clean()
