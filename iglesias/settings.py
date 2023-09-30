@@ -47,14 +47,14 @@ INSTALLED_APPS = [
 ]
 
 BUSINESS_LOGO_PATH = 'admin/img/logo.png'
-BUSINESS_NAME = 'Iglesias'
+BUSINESS_NAME = 'Habana - Isla'
 BUSINESS_NAME_IMG_PATH = 'admin/img/logo.png'
 BUSINESS_BANNER = 'admin/img/banner_lg.png'
 BUSINESS_ICON_PATH = 'admin/img/logo.png'
 
 JAZZMIN_SETTINGS = {
     "site_brand": BUSINESS_NAME,
-    "welcome_sign": 'Iglesias',
+    "welcome_sign": 'Habana - Isla',
     'site_icon': BUSINESS_ICON_PATH,
     'site_logo': BUSINESS_LOGO_PATH,
     'site_logo_classes': 'brand-image',
