@@ -25,7 +25,7 @@ class User(AbstractUser):
         ('2', 'Presbítero'),
     ), max_length=2, null=True, blank=True)
     image = models.ImageField('Foto de perfil', null=True, blank=True, upload_to='user/')
-    distrito = models.ForeignKey(Distrito, on_delete=models.SET_NULL, null=True, blank=True)
+    distrito = models.ForeignKey(Distrito, on_delete=models.CASCADE, null=True, blank=True)
     REQUIRED_FIELDS = ['is_superstar', 'email']
 
     class Meta:
